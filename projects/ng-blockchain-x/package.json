@@ -1,0 +1,26 @@
+{
+    "name": "ng-blockchainx",
+    "version": "0.0.1",
+    "author": {
+        "name": "sivabharathy",
+        "email": "gotocva@gmail.com"
+    },
+    "scripts": {
+        "jdoc": "node_modules/jsdoc/jsdoc.js src/lib/meta-mask/meta-mask.service.ts",
+        "doc": "node_modules/jsdoc/jsdoc.js --configure node_modules/angular-jsdoc/common/conf.json --template node_modules/angular-jsdoc/angular-template --destination build/docs  --recurse dist/ng-blockchain-x"
+    },
+    "peerDependencies": {
+        "@angular/common": "*",
+        "@angular/core": "*"
+    },
+    "dependencies": {
+        "@walletconnect/client": "^1.7.8",
+        "@walletconnect/qrcode-modal": "^1.7.8",
+        "tslib": "^2.3.0",
+        "web3": "^1.7.3"
+    },
+    "devDependencies": {
+        "angular-jsdoc": "^1.5.1",
+        "jsdoc": "^3.6.10"
+    }
+}

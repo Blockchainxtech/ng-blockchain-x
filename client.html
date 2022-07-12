@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metamask client</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+
+<body>
+
+
+    <select id="chainId" class="form-select" aria-label="Default select example">
+        <option value="0x1">ETH Mainnet</option>
+        <option value="0x3">Ropsten</option>
+        <option value="0x4">Rinkeby</option>
+        <option value="0x38">BSC Mainnet</option>
+        <option value="0x61">BSC Testnet</option>
+    </select>
+
+    <button id="network-change">change network</button>
+
+    <br>
+
+    <button id="connect">connect metamask</button>
+
+    <script>
+        $("#connect").click(async function() {
+            const ethereum = window['ethereum'];
+            console.log(ethereum);
+            const accounts = await ethereum.request({
+                method: 'eth_requestAccounts'
+            });
+            const account = accounts[0];
+            alert('your connected wallet address is ' + account);
+        });
+
+        $("#network-change").click(async function() {
+            const chainId = $("#chainId").val();
+            await ethereum.request({
+                method: 'wallet_switchEthereumChain',
+                params: [{
+                    chainId: chainId
+                }]
+            }).catch((err) => {
+                alert('rejected on metamask');
+            });
+        });
+    </script>
+</body>
+
+</html>
