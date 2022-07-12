@@ -1,0 +1,115 @@
+<div class="grid grid-cols-4 gap-4 mt-4">
+    <div>
+
+    </div>
+    <!-- ... -->
+    <div>
+        <ng-tailwind-date-picker (selectedDate)="setActiveDate($event)"></ng-tailwind-date-picker>
+    </div>
+</div>
+<!-- <nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand">NgBlockchainX</a>
+        <router-outlet></router-outlet>
+        <form class="d-flex">
+            <div *ngIf="isMetamaskConnected;then ifContent else elseContent"></div>
+            <ng-template #ifContent>
+                <button class="btn btn-success" type="button">Metamask connected {{connectedAddress}}</button>
+            </ng-template>
+            <ng-template #elseContent>
+                <button class="btn btn-info" (click)="connect()" type="button">Connect</button>
+            </ng-template>
+        </form>
+    </div>
+</nav>
+
+<NgBx-connect-wallet [connectWallet]="true"></NgBx-connect-wallet>
+
+<div class="container mt-4">
+
+    <div class="col-md-12">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        Balance : {{ connectedBalance }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <select (change)="changeNetwork()" [(ngModel)]="activeChainId" class="form-select" aria-label="Default select example">
+                            <option value="0x1">ETH Mainnet</option>
+                            <option value="0x3">Ropsten</option>
+                            <option value="0x4">Rinkeby</option>
+                            <option value="0x38">BSC Mainnet</option>
+                            <option value="0x61">BSC Testnet</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-md-12 mt-4">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Contract address</label>
+                            <input type="text" [(ngModel)]="contractAddress" class="form-control" id="exampleFormControlInput1" placeholder="contract address">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-floating">
+                            <textarea [(ngModel)]="abi" class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 250px"></textarea>
+                            <label for="floatingTextarea2">ABI source code</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <button class="btn-primary btn" (click)="connectWeb3()">Connect contract</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-md-12">
+        <div *ngIf="abi">
+            <div *ngFor="let abi of parsedAbi">
+
+                <div class="card mt-4">
+                    <div class="card-header" style="text-transform: capitalize;">
+                        {{abi?.name}}
+                    </div>
+                    <div class="card-body">
+                        <div *ngIf="abi.type == 'function'">
+                            <div *ngFor="let input of abi?.inputs">
+                                <label for="" class="form-label">{{ input?.name }}</label>
+                                <input type="text" class="form-control" [(ngModel)]="params[input.name]">
+                            </div>
+                            <button class="btn btn-primary mt-2" style="float: right;min-width: 80px;" (click)="callContractFunction(abi.name,abi)">Call</button> {{ outputs[abi.name] }}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div> -->
