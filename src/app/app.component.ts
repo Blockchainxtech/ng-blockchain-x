@@ -26,7 +26,8 @@ export class AppComponent {
   public params: any[] = [];
   public outputs: any[] = [];
 
-  constructor(private http: HttpClient, private metaMaskService: MetaMaskService, private web3Service: Web3Service, private walletConnect:WalletConnectService) {
+  constructor(private http: HttpClient, private metaMaskService: MetaMaskService, private web3Service: Web3Service, private walletConnect:WalletConnectService,
+    private walletConnectService:WalletConnectService) {
     const self = this;
     // this.web3Service.setProvider('https://bsc-dataseed1.defibit.io/');
     // this.web3Service.connect();
@@ -97,7 +98,9 @@ export class AppComponent {
     })
     .catch(console.dir);
   }
-
+public async walletConnectModal(){
+    this.walletConnectService.openWalletConnectModal();
+}
   public async connectWeb3() {
     const  message = {
       /*
