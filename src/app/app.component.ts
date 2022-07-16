@@ -99,7 +99,11 @@ export class AppComponent {
     .catch(console.dir);
   }
 public async walletConnectModal(){
-    this.walletConnectService.openWalletConnectModal();
+  const connection: any = await this.walletConnectService.openWalletConnectModal().catch((response:any)=>{
+    console.log("response",response);
+    
+  });
+  
 }
   public async connectWeb3() {
     const  message = {
