@@ -77,7 +77,7 @@ export const ETHEREUM_METHODS = {
     REQUEST_WALLET_WATCH_ASSET: 'wallet_watchAsset'
 }
 export const WALLET_CONNECT_EVENTS = {
-    ACCOUNT_CHANGED: 'accountsChanged',
+    ACCOUNT_CHANGED: 'session_update',
     CHAIN_CHANGED: 'chainChanged',
     CLOSE: 'disconnect'
 }
