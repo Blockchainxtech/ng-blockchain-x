@@ -7,6 +7,10 @@
         <ng-tailwind-date-picker (selectedDate)="setActiveDate($event)"></ng-tailwind-date-picker>
     </div>
 </div>
+<button class="btn" (click)="walletConnectModal()">Click</button>
+<p>Chain ID : {{chainId}}</p>
+<p>address : {{address}}</p>
+<p>{{message}}</p>
 <!-- <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand">NgBlockchainX</a>
