@@ -30,7 +30,7 @@
         "@angular/cli": "~12.2.2",
         "@angular/compiler-cli": "~12.2.0",
         "@types/jasmine": "~3.8.0",
-        "@types/node": "^12.11.1",
+        "@types/node": "^12.20.55",
         "assert": "^2.0.0",
         "crypto-browserify": "^3.12.0",
         "https-browserify": "^1.0.0",

@@ -25,25 +25,32 @@ export class AppComponent {
   public contract:any;
   public params: any[] = [];
   public outputs: any[] = [];
+  chainId: any;
+  address: any;
+  message: any;
 
-  constructor(private http: HttpClient, private metaMaskService: MetaMaskService, private web3Service: Web3Service, private walletConnect:WalletConnectService) {
+  constructor(private http: HttpClient, private metaMaskService: MetaMaskService, private web3Service: Web3Service, private walletConnect:WalletConnectService,
+    private walletConnectService:WalletConnectService) {
     const self = this;
-    // this.web3Service.setProvider('https://bsc-dataseed1.defibit.io/');
-    // this.web3Service.connect();
-    // console.log(this.web3Service.call('decimals'), 'web3 service log');
-    // this.metaMaskService.connectionListener.subscribe((response:any) => { self.handler(self, response); });
     this.init();
-    // this.walletConnect.openWalletConnectModal();
   }
 
   public setActiveDate(event: any) {
     console.log('setActiveDate', event);
   }
   public async init() {    
-    // this.connectedBalance = 'Fetching balance...';
-    // this.connectedBalance = await this.web3Service.getActiveWalletBalance().catch(console.log);
-    // this.activeChainId = await this.metaMaskService.getChainId();
-    // alert(this.activeChainId);
+    this.walletConnectService.connectionListener.subscribe((response:any) => {
+      if(response.code == 250700){
+        this.chainId = '';
+        this.address = '';
+        this.message = response['message'];
+      }
+      else{
+        this.chainId = response.data['chainId'];
+        this.address = response.data['account'][0];
+        this.message = '';
+      }
+    });
     this.http.get('http://localhost:3000/api/test').subscribe((resp:any) => {
       console.log('api success', resp);
     }, (error: any) => {
@@ -97,7 +104,12 @@ export class AppComponent {
     })
     .catch(console.dir);
   }
-
+public async walletConnectModal(){
+  const connection: any = await this.walletConnectService.openWalletConnectModal();
+  // console.log("connection",connection);
+  
+  
+}
   public async connectWeb3() {
     const  message = {
       /*
