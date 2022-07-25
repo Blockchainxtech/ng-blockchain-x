@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ETHEREUM_METHODS, META_MASK_EVENTS, CHAIN_ID, ERRORS, RESPONSE } from './meta-mask.constants';
+import { chainInfo, supportedChains } from './meta-mask.mock';
 
 import { ProviderRpcError, AddCustumTokenParam, AddTokenParam, CustomResponse, SimpleResponse} from './meta-mast.interfaces';
 
@@ -11,12 +12,20 @@ import { ProviderRpcError, AddCustumTokenParam, AddTokenParam, CustomResponse, S
 export class MetaMaskService {
 
   private metaMask: any;
+  public isMetaMaskConnected: boolean = false;
+  private supportedChains: string[] = [];
 
   // meta mask connection subject to broadcast connection state
   private metaMaskConnection = new BehaviorSubject(RESPONSE.SERVICE_INITIALIZED);
-  public connectionListener = this.metaMaskConnection.asObservable();
+  public connectionListener: Observable<any> = this.metaMaskConnection.asObservable();
 
   constructor() { this.onInit(); }
+
+  public setSupportedChains(chains: string[]) {
+    this.supportedChains = chains;
+  }
+
+  public chainDetails(chainId: string) { return chainInfo(chainId); };
 
   /**
    * On init function called on service initialisation
@@ -33,6 +42,7 @@ export class MetaMaskService {
           if (accounts.length === 0) {
             this.connectionStatusUpdate(ERRORS.METAMASK_NOT_CONNECTED);
           } else {
+            this.isMetaMaskConnected = true;
             this.metaMaskEventListeners();
             const response = RESPONSE.METAMASK_CONNECTED;
             const chainId = await this.getChainId().catch(console.log);
@@ -49,10 +59,31 @@ export class MetaMaskService {
   }
 
   /**
+   * getter function of connection status
+   */
+  get isConnected() { return this.isMetaMaskConnected; };
+
+  /**
+   * 
+   * @param chainId 
+   */
+  public async networkHandler() {
+    const chainId = await this.getChainId().catch(console.log);
+    if (this.supportedChains.length > 0 && this.supportedChains.indexOf(chainId) == -1) {
+      // connected network is not supported network
+      this.metaMaskConnection.next(RESPONSE.CHAIN_NOT_SUPPORTED);
+    }
+    if (this.supportedChains.length == 0) {
+      this.metaMaskConnection.next(RESPONSE.CHAIN_NOT_SUPPORTED);
+    }
+  }
+
+  /**
    * 
    * @param message 
    */
   public connectionStatusUpdate(response: CustomResponse) {
+    this.networkHandler();
     this.metaMaskConnection.next(response);
   }
 
@@ -181,7 +212,7 @@ export class MetaMaskService {
       this.getAddress().then(async (accounts:any) => {
         const signature = await this.metaMask.request({
           method: 'personal_sign',
-          params: [message, accounts[0], 'Random text'],
+          params: [message, accounts[0], message],
         }).catch((error:any) => {
           reject(error);
         })

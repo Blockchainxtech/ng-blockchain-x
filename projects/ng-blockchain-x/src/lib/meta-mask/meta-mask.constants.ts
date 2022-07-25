@@ -43,6 +43,22 @@ export const RESPONSE = {
           
         }
     },
+    CHAIN_NOT_SUPPORTED : {
+        status : false,
+        code : 250641,
+        message : 'connected chain not supported',
+        data : {
+          
+        }
+    },
+    SUPPORTED_CHAINS_NOT_SET : {
+        status : false,
+        code : 250641,
+        message : 'supported chains not set, set to continue',
+        data : {
+          
+        }
+    },
     CHAIN_CHANGED : {
         status : true,
         code : 250610,
