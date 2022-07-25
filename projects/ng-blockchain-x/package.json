@@ -1,14 +1,17 @@
 {
     "name": "ng-blockchainx",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "author": {
         "name": "sivabharathy",
         "email": "gotocva@gmail.com"
     },
-    "scripts": {
-        "jdoc": "node_modules/jsdoc/jsdoc.js src/lib/meta-mask/meta-mask.service.ts",
-        "doc": "node_modules/jsdoc/jsdoc.js --configure node_modules/angular-jsdoc/common/conf.json --template node_modules/angular-jsdoc/angular-template --destination build/docs  --recurse dist/ng-blockchain-x"
+    "homepage": "https://github.com/Blockchainxtech/ng-blockchain-x#readme",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Blockchainxtech/ng-blockchain-x.git",
+        "directory": "packages/ng-blockchain-x"
     },
+    "scripts": {},
     "peerDependencies": {
         "@angular/common": "*",
         "@angular/core": "*"
