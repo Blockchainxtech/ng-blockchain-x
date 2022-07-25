@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdocs=self.webpackChunkdocs||[]).push([[968],{733:e=>{e.exports=JSON.parse('{"title":"Web3 service","slug":"/category/web3-service","permalink":"/docs/category/web3-service","navigation":{"previous":{"title":"Getting started","permalink":"/docs/intro"},"next":{"title":"usage-guid","permalink":"/docs/web3-service/usage-guid"}}}')}}]);
