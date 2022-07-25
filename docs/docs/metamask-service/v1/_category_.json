@@ -1,0 +1,8 @@
+{
+    "label": "v1.0.0 docs",
+    "position": 2,
+    "link": {
+        "type": "generated-index",
+        "description": "5 minutes to learn the implementation ways of metamask service."
+    }
+}
