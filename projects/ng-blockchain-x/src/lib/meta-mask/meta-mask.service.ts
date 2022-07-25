@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { ETHEREUM_METHODS, META_MASK_EVENTS, CHAIN_ID, ERRORS, RESPONSE } from './meta-mask.constants';
-import { chainInfo, supportedChains } from './meta-mask.mock';
+import { chainInfo } from './meta-mask.mock';
 
 import { ProviderRpcError, AddCustumTokenParam, AddTokenParam, CustomResponse, SimpleResponse} from './meta-mast.interfaces';
 

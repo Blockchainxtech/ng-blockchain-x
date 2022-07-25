@@ -8,6 +8,7 @@ import { getAddNetworkParam } from 'projects/ng-blockchain-x/src/lib/meta-mask/m
 
 const abi = require('src/contracts/nifty-token.json');
 
+import { chains } from 'projects/ng-blockchain-x/src/lib/meta-mask/meta-mask.mock';
 
 @Component({
   selector: 'ang-lib-root',
@@ -22,6 +23,8 @@ export class AppComponent implements OnInit {
   public messageToSign: string = '';
   public connectedChain: any;
   public walletAddress: string = '';
+  public selectedNetwork: string = '';
+  public chains: any;
 
   constructor(private http: HttpClient, private metaMaskService: MetaMaskService, private web3Service: Web3Service, private walletConnect:WalletConnectService,
     private walletConnectService:WalletConnectService) {
@@ -30,6 +33,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     console.log(`AppComponent : ngOnInit`);
     console.dir(`meta mask connection status : ${JSON.stringify(getAddNetworkParam('0x61'))}`);
+    this.chains = chains;
     this.metaMaskService.setSupportedChains(['0x61', '0x38']);
     
     const accounts: any = await this.metaMaskService.getAddress().catch((error: any) => {
@@ -48,6 +52,15 @@ export class AppComponent implements OnInit {
   }
 
 
+  public getNameFromChain(chain: any, key: string) {
+    return chain[key];
+  }
+
+  public async addNetwork() {
+    // alert(this.selectedNetwork);
+    console.log(getAddNetworkParam(this.selectedNetwork));
+    await this.metaMaskService.addNetwork(getAddNetworkParam(this.selectedNetwork));
+  }
   public changeNetwork(chainId: string) {
     const param: any = getAddNetworkParam(chainId);
     if (param != false) this.metaMaskService.addNetwork(param);
