@@ -11,4 +11,8 @@ export * from './lib/storage-service/index';
 
 export * from './lib/web3/web3.service';
 
+export * from './lib/helper.service';
+
+export * from './lib/meta-mask/meta-mask.mock';
+
 export * from './lib/wallet-connect/wallet-connect.service';
