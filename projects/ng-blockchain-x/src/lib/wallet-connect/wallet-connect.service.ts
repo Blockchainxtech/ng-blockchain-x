@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject } from "rxjs";
 
-import Web3 from "web3";
+// @ts-ignore
+import Web3 from 'web3/dist/web3.min.js';
 
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";

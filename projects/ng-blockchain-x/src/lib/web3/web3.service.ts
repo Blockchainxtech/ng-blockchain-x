@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import Web3 from 'web3';
+// @ts-ignore
+import Web3 from 'web3/dist/web3.min.js';
 import { chainInfo } from '../meta-mask/meta-mask.mock';
 
 import { connectParams, connectResponse, ETHsendTransactionParam, SendTransactionParam, ApproveParam } from './web3-interfaces';
@@ -145,7 +146,7 @@ export class Web3Service {
             if (data.value) {
                 parameter.value = data.value;
             }
-            this.web3.eth.sendTransaction(parameter).then(resolve).catch(reject);
+            this.ethWeb3.eth.sendTransaction(parameter).then(resolve).catch(reject);
         });
     }
 

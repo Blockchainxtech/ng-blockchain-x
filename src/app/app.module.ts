@@ -7,12 +7,14 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { NgBlockchainXModule } from 'projects/ng-blockchain-x/src/public-api';
 import { NgTailwindDatePickerModule } from 'ng-tailwind-date-picker';
+import { WalletPopupComponent } from 'projects/ng-blockchain-x/src/lib/wallet-popup/wallet-popup.component';
 
 // import { NgBlockchainXModule } from "ng-blockchainx";
 
 @NgModule({
   declarations: [
     AppComponent,
+    WalletPopupComponent
   ],
   imports: [
     BrowserModule,
