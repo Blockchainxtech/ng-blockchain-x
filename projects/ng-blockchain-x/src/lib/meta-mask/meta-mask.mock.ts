@@ -29,6 +29,27 @@ export const chains = {
       }
     ]
   },
+  1004: {
+    name: 'Ekta Testnet',
+    chain: 'EKTA',
+    icon: 'ekta',
+    rpc: [
+      'https://test.ekta.io:8545'
+    ],
+    faucets: [],
+    nativeCurrency: { name: 'Ekta v2', symbol: 'EKTA', decimals: 18 },
+    infoURL: 'https://www.ekta.io/portal/',
+    shortName: 'ekta',
+    chainId: 1004,
+    networkId: 1004,
+    explorers: [
+      {
+        name: 'Ekta Testnet',
+        url: 'https://test.ektascan.io/',
+        standard: 'EIP3091'
+      }
+    ]
+  },
   2: {
     name: 'Expanse Network',
     chain: 'EXP',
