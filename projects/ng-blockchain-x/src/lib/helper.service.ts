@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import Web3 from 'web3';
+// @ts-ignore
+import Web3 from 'web3/dist/web3.min.js';
 
 @Injectable({
   providedIn: 'root'
