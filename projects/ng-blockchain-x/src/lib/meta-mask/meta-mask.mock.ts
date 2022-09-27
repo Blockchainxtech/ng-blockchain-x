@@ -45,8 +45,27 @@ export const chains = {
     explorers: [
       {
         name: 'Ekta Testnet',
-        url: 'https://test.ektascan.io/',
-        standard: 'EIP3091'
+        url: 'https://test.ektascan.io/'
+      }
+    ]
+  },
+  1994: {
+    name: 'Ekta Mainnet',
+    chain: 'EKTA',
+    icon: 'ekta',
+    rpc: [
+      ' https://main.ekta.io'
+    ],
+    faucets: [],
+    nativeCurrency: { name: 'Ekta v2', symbol: 'EKTA', decimals: 18 },
+    infoURL: 'https://www.ekta.io/portal/',
+    shortName: 'ekta',
+    chainId: 1994,
+    networkId: 1994,
+    explorers: [
+      {
+        name: 'Ekta Mainnet',
+        url: 'https://ektascan.io/'
       }
     ]
   },
