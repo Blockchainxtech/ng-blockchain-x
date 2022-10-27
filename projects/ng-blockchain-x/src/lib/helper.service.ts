@@ -92,14 +92,14 @@ export class BlockchainxHelper {
                     }
         
                 case 9: {
-                        let weiValue = web3.utils.toWei(value.toString(), 'gwei');
-                        originalValue = web3.utils.fromWei(weiValue, 'gwei');
+                        let weiValue = web3.utils.fromWei(value.toString(), 'gwei');
+                        originalValue = weiValue
                         break;
                     }
         
                 case 6: {
-                        let weiValue = value.toString();
-                        originalValue = web3.utils.fromWei(weiValue, 'mwei');
+                        let weiValue = web3.utils.fromWei(value.toString(), 'mwei');
+                        originalValue = weiValue
                         break;
                     }
         
