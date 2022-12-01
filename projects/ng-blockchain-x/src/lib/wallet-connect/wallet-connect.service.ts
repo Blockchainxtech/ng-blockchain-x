@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 import Web3 from 'web3';
 
+import { ApproveParam } from './wallet-connect.interfaces'
 import WalletConnect from '@walletconnect/client';
 import QRCodeModal from '@walletconnect/qrcode-modal';
 import {
@@ -10,6 +11,7 @@ import {
   RESPONSE,
   CustomResponse,
   WALLET_CONNECT_URI,
+  ETHEREUM_METHODS,
 } from './wallet-connect.constants';
 
 @Injectable({
@@ -20,9 +22,7 @@ export class WalletConnectService {
 
   // meta mask connection subject to broadcast connection state
   private walletConnectConnection = new BehaviorSubject(RESPONSE.SERVICE_INITIALIZED);
-  private walletTransaction = new BehaviorSubject(RESPONSE.SERVICE_INITIALIZED);
   public connectionListener = this.walletConnectConnection.asObservable();
-  public transactionListener = this.walletTransaction.asObservable();
 
   
   contract: any;
@@ -96,14 +96,6 @@ export class WalletConnectService {
     this.walletConnectConnection.next(response);
   }
 
-  /**
-   *
-   * @param message
-   */
-   public transactionStatusUpdate(response: CustomResponse) {
-    this.walletTransaction.next(response);
-  }
-
   public openWalletConnectModal() {
     if (!this.walletConnect.connected) {
       // create new session
@@ -119,20 +111,96 @@ export class WalletConnectService {
   }
 
   /**
-     * Send Transaction
-     * @param params
-     * @returns
-     */
+   * Send Transaction
+   * @param {any} params
+   * @returns {promise}
+   */
   public async send(...params: any) {
-    this.walletConnect.sendTransaction(params[0]).then((result: any) => {
-      const response = RESPONSE.WALLET_TRANSACTION_SUCCESS;
-      response.data = result;
-      this.transactionStatusUpdate(response);
+    return new Promise((resolve, reject) => {
+      this.walletConnect.sendTransaction(params[0])
+        .then((result: any) => {
+          resolve(result);
+        })
+        .catch((error: any) => {
+          reject(error)
+        });
     })
-    .catch((error: any) => {
-      const response = RESPONSE.WALLET_TRANSACTION_FAILE;
-      response.data = error;
-      this.transactionStatusUpdate(response);
-    });
+  }
+
+   /**
+     * 
+     * @param data { ApproveParam }
+     * @returns Observable
+     */
+    public approve(data: ApproveParam){
+      console.log("called here");
+      const parameter = {
+        method: 'eth_sendTransaction', 
+        from: data.from,
+        to: data.to,
+        data: data.data,
+       }
+      return new Promise((resolve, reject) => {
+        this.walletConnect.sendTransaction(parameter)
+          .then((result:any) => {
+            console.log("result aprov",result);
+            
+            resolve(result);
+          })
+          .catch((error: any) => {
+            console.log("error aprov",error);
+            reject(error)
+          });
+      })
+  }
+
+  /**
+   * 
+   * @param {array} data 
+   * @returns 
+   */
+  public async signMessage(data: any) {
+    
+    return new Promise((resolve, reject) => {
+      this.walletConnect.sendTransaction(
+        {
+          method: 'eth_signTypedData',
+          params: [data[0], data[1]], 
+        }).then((result: any) => {
+          console.log("result",result);
+          
+        resolve(result);
+      })
+      .catch((error: any) => {
+        console.log("error",error);
+
+        reject(error)
+      });
+  })
+    // return new Promise((resolve, reject) => {
+    //     const signature = this.walletConnect.sendTransaction({
+    //       method: 'eth_sign',
+    //       params: [data[1], data[0]],
+    //     }).catch((error:any) => {
+    //       console.log("error",error);
+          
+    //       reject(error);
+    //     })
+    //     console.log("signature",signature);
+
+    //     resolve(signature);
+    // })
+    
+  }
+
+  public async getAddress() : Promise<string[]>{
+    return new Promise((resolve, reject) => {
+      this.walletConnect
+        .request(ETHEREUM_METHODS.REQUEST_ETH_ACCOUNT)
+        .then((accounts: Array<string>) => {
+          resolve(accounts);
+        })
+        .catch(reject);
+    })
   }
 }

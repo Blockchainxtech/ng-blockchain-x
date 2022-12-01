@@ -11,6 +11,14 @@ interface AddCustumTokenOptions {
     image: string;
 }
   
+export interface ApproveParam {
+    amount: number;
+    approveContract: any;
+    from: string;
+    to: string;
+    data: string;
+}
+
 export interface AddCustumTokenParam {
     type: string;
     options: AddCustumTokenOptions;
