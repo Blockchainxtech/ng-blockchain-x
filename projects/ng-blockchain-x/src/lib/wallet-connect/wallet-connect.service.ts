@@ -156,8 +156,6 @@ export class WalletConnectService {
    * @returns 
    */
   public async signMessage(data: any) {
-    console.log("data address", data);
-
     return new Promise((resolve, reject) => {
       this.walletConnect.sendTransaction(
         {
@@ -166,13 +164,9 @@ export class WalletConnectService {
           method: 'eth_signTypedData',
           params: [data[0], data[1]],
         }).then((result: any) => {
-          console.log("result", result);
-
           resolve(result);
         })
         .catch((error: any) => {
-          console.log("error", error);
-
           reject(error)
         });
     })
