@@ -24,7 +24,7 @@ export class WalletConnectService {
   private walletConnectConnection = new BehaviorSubject(RESPONSE.SERVICE_INITIALIZED);
   public connectionListener = this.walletConnectConnection.asObservable();
 
-  
+
   contract: any;
 
   constructor() {
@@ -127,31 +127,27 @@ export class WalletConnectService {
     })
   }
 
-   /**
-     * 
-     * @param data { ApproveParam }
-     * @returns Observable
-     */
-    public approve(data: ApproveParam){
-      console.log("called here");
-      const parameter = {
-        method: 'eth_sendTransaction', 
-        from: data.from,
-        to: data.to,
-        data: data.data,
-       }
-      return new Promise((resolve, reject) => {
+  /**
+    * 
+    * @param data { ApproveParam }
+    * @returns Observable
+    */
+  public approve(data: ApproveParam) {
+    const parameter = {
+      method: 'eth_sendTransaction',
+      from: data.from,
+      to: data.to,
+      data: data.data,
+    }
+    return new Promise((resolve, reject) => {
         this.walletConnect.sendTransaction(parameter)
-          .then((result:any) => {
-            console.log("result aprov",result);
-            
+          .then((result: any) => {
             resolve(result);
           })
           .catch((error: any) => {
-            console.log("error aprov",error);
             reject(error)
           });
-      })
+    })
   }
 
   /**
@@ -160,40 +156,29 @@ export class WalletConnectService {
    * @returns 
    */
   public async signMessage(data: any) {
-    
+    console.log("data address", data);
+
     return new Promise((resolve, reject) => {
       this.walletConnect.sendTransaction(
         {
+          to: data[2],
+          from: data[0],
           method: 'eth_signTypedData',
-          params: [data[0], data[1]], 
+          params: [data[0], data[1]],
         }).then((result: any) => {
-          console.log("result",result);
-          
-        resolve(result);
-      })
-      .catch((error: any) => {
-        console.log("error",error);
+          console.log("result", result);
 
-        reject(error)
-      });
-  })
-    // return new Promise((resolve, reject) => {
-    //     const signature = this.walletConnect.sendTransaction({
-    //       method: 'eth_sign',
-    //       params: [data[1], data[0]],
-    //     }).catch((error:any) => {
-    //       console.log("error",error);
-          
-    //       reject(error);
-    //     })
-    //     console.log("signature",signature);
+          resolve(result);
+        })
+        .catch((error: any) => {
+          console.log("error", error);
 
-    //     resolve(signature);
-    // })
-    
+          reject(error)
+        });
+    })
   }
 
-  public async getAddress() : Promise<string[]>{
+  public async getAddress(): Promise<string[]> {
     return new Promise((resolve, reject) => {
       this.walletConnect
         .request(ETHEREUM_METHODS.REQUEST_ETH_ACCOUNT)
