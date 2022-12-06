@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
-import { ConnectWalletComponent } from './connect-wallet.component';
 import { NgBlockchainXComponent } from './ng-blockchain-x.component';
+// import { WalletPopupComponent } from './wallet-popup/wallet-popup.component';
 
 
 @NgModule({
   declarations: [
     NgBlockchainXComponent,
-    ConnectWalletComponent
+    // WalletPopupComponent,
   ],
   imports: [
+    
   ],
   exports: [
     NgBlockchainXComponent,
-    ConnectWalletComponent
+    // WalletPopupComponent
   ]
 })
 export class NgBlockchainXModule { }

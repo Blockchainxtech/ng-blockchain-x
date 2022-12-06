@@ -37,8 +37,6 @@ export interface AddTokenParam {
     params: Param[];
 }
 
-
-
 interface Data {
 }
 

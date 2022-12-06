@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import Web3 from 'web3';
+// @ts-ignore
+import Web3 from 'web3/dist/web3.min.js';
 
 import { ApproveParam } from './wallet-connect.interfaces'
 import WalletConnect from '@walletconnect/client';
