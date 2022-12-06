@@ -1,0 +1,112 @@
+.modal {
+    display: block; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,.5); 
+  }
+  .modal-content {
+      background-color: #fefefe;
+      margin: 3% auto; 
+      padding: 20px;
+      border: 1px solid #888;
+      width: 35%;
+  }
+  .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      text-decoration: none;
+      cursor: pointer;
+      position: absolute;
+      top: -40px;
+      right: -35px;
+      border: 1px solid #ddd;
+      padding: 0px;
+      border-radius: 100%;
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      background: #fff;
+      box-shadow: 0px 1px 1px 1px #1b1818ba;
+  }
+  
+  .close:hover,
+  .close:focus {
+      background: #ff0000;
+      color: #fff;
+      text-decoration: none;
+      cursor: pointer;
+      border:1px solid transparent;
+  }
+  #modal_btn{
+      padding: 1rem;
+      border:1px solid #eee;
+      font-size: 16px;
+      background-color:#ddd;
+      color:#fff;
+  }
+  h1, h2, h3, h4, h5, h6{
+      margin:0 0 .5rem;
+  }
+  .modal-header{
+      position: relative;
+      border-bottom: 1px solid #ddd;
+  }
+  .rows{
+      display: grid;
+      gap:1rem;
+      padding: 10px;
+      margin: 10px 0px;
+  }
+  .grid-item{
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      background:rgb(86, 44, 175);
+      transition: .2s all ease-in-out;
+  }
+  .grid-item p{
+      font-size: 16px;
+      line-height: 26px;
+      padding: 0 0;
+      margin: 0;
+      color: #fff;
+      font-weight: 500;
+  }
+  .grid-item:hover{
+      transform: scale(1.05);
+      transition: .2s all ease-in-out;
+      overflow: hidden;
+      outline-offset: -5px;
+      outline: 2px solid #fff;
+      border-radius: 10px;
+  }
+  .grid-item:hover img{
+      transform: scale(1.1);
+      transition: .2s all ease-in-out;
+      overflow: hidden;
+  }
+  .testnet-head {
+        padding: 10px 10px 0px;
+    }
+  .testnet-head h3{
+        font-size:20px;
+        line-height: 30px;
+        font-weight: 600;
+        padding: 0;
+  }
+  @media(min-width:991px){
+    .rows { 
+          grid-template-columns: repeat(2, 1fr); 
+      }
+  }
+  @media(min-width:992px){
+    .rows { 
+      grid-template-columns: repeat(2 1fr); 
+      }
+  }
