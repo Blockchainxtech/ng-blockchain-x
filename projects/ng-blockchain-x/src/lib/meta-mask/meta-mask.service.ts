@@ -207,12 +207,12 @@ export class MetaMaskService {
    * 
    * @param message 
    */
-  public async signMessage(message: any) {
+   public async signMessage(message: any) {
     return new Promise((resolve, reject) => {
       this.getAddress().then(async (accounts:any) => {
         const signature = await this.metaMask.request({
-          method: 'personal_sign',
-          params: [message, accounts[0], message],
+          method: 'eth_signTypedData_v4',
+          params: [accounts[0], message],
         }).catch((error:any) => {
           reject(error);
         })
