@@ -7,7 +7,7 @@ import { chainInfo } from '../meta-mask/meta-mask.mock';
 import { connectParams, connectResponse, ETHsendTransactionParam, SendTransactionParam, ApproveParam } from './web3-interfaces';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class Web3Service {
 
@@ -30,27 +30,35 @@ export class Web3Service {
         return new Promise(async (resolve, reject) => {
             const chainDetail = chainInfo(connectionParams.chainId);
 
-            if (chainDetail.rpc == undefined || chainDetail.rpc.length == 0) {
-                // need rpcUrl
-                reject({ status: false, message: 'RPC url needed for this network', account: null });
+            if (connectionParams.rpcUrl) {
+                this.web3 = new Web3(connectionParams.rpcUrl);
+                const accounts = await this.web3.eth.getAccounts().catch(console.log);
+                this.account = accounts[0];
+                resolve({ status: true, message: 'Web3 connected successfully', account: this.account });
             } else {
-                if (chainDetail.rpc[0].includes('${INFURA_API_KEY}') == true) {
-                    // need infura api key
-                    if (!connectionParams.infuraApiKey) {
-                        reject({ status: false, message: 'Infura api key needed for this network', account: null });
+                if (chainDetail.rpc == undefined || chainDetail.rpc.length == 0) {
+                    // need rpcUrl
+                    reject({ status: false, message: 'RPC url needed for this network', account: null });
+                } else {
+                    if (chainDetail.rpc[0].includes('${INFURA_API_KEY}') == true) {
+                        // need infura api key
+                        if (!connectionParams.infuraApiKey) {
+                            reject({ status: false, message: 'Infura api key needed for this network', account: null });
+                        } else {
+                            const rpcUrl = chainDetail.rpc[0].replace('${INFURA_API_KEY}', connectionParams.infuraApiKey);
+                            this.web3 = new Web3(rpcUrl);
+                            const accounts = await this.web3.eth.getAccounts().catch(console.log);
+                            this.account = accounts[0];
+                        }
                     } else {
-                        const rpcUrl = chainDetail.rpc[0].replace('${INFURA_API_KEY}', connectionParams.infuraApiKey);
-                        this.web3 = new Web3(rpcUrl);
+                        this.web3 = new Web3(chainDetail.rpc[0]);
                         const accounts = await this.web3.eth.getAccounts().catch(console.log);
                         this.account = accounts[0];
                     }
-                } else {
-                    this.web3 = new Web3(chainDetail.rpc[0]);
-                    const accounts = await this.web3.eth.getAccounts().catch(console.log);
-                    this.account = accounts[0];
+                    resolve({ status: true, message: 'Web3 connected successfully', account: this.account });
                 }
-                resolve({ status: true, message: 'Web3 connected successfully', account: this.account });
             }
+
         });
     }
 
@@ -63,11 +71,11 @@ export class Web3Service {
     public getActiveWalletBalance() {
         return new Promise(async (resolve, reject) => {
             const self = this;
-            this.web3.eth.getBalance(this.account, (err:any, result:any) => {
+            this.web3.eth.getBalance(this.account, (err: any, result: any) => {
                 if (err) {
-                  reject(err);
+                    reject(err);
                 } else {
-                  resolve(self.web3.utils.fromWei(result, "ether"));
+                    resolve(self.web3.utils.fromWei(result, "ether"));
                 }
             })
         });
@@ -77,8 +85,8 @@ export class Web3Service {
      * 
      * @returns 
      */
-    public async decimals(){
-        return(await this.contract.methods.decimals().call());
+    public async decimals() {
+        return (await this.contract.methods.decimals().call());
     }
 
     /**
@@ -110,7 +118,7 @@ export class Web3Service {
      * @returns 
      */
     public async getAllowance(owner: string, spender: string) {
-        return(await this.contract.methods.allowance(owner, spender).call());
+        return (await this.contract.methods.allowance(owner, spender).call());
     }
 
     /**
@@ -122,7 +130,7 @@ export class Web3Service {
         return new Promise(async (resolve, reject) => {
             const approveAbi = await this.contract.methods.approve(data.approveContract, data.amount).encodeABI();
             const parameter = {
-                method: 'eth_sendTransaction', 
+                method: 'eth_sendTransaction',
                 from: this.web3.utils.toChecksumAddress(data.address),
                 to: data.toAddress,
                 data: approveAbi,
@@ -135,7 +143,7 @@ export class Web3Service {
     public sendTransaction(data: SendTransactionParam) {
         return new Promise(async (resolve, reject) => {
             const parameter: ETHsendTransactionParam = {
-                method: 'eth_sendTransaction', 
+                method: 'eth_sendTransaction',
                 from: this.web3.utils.toChecksumAddress(data.fromAddress),
                 to: data.toAddress,
                 data: data.abi,
