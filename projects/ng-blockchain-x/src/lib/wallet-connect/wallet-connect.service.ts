@@ -14,6 +14,7 @@ import {
   WALLET_CONNECT_URI,
   ETHEREUM_METHODS,
 } from './wallet-connect.constants';
+import { BlockchainxHelper } from '../helper.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,7 +29,7 @@ export class WalletConnectService {
 
   contract: any;
 
-  constructor() {
+  constructor(private helper: BlockchainxHelper) {
     this.init();
   }
 
@@ -63,8 +64,9 @@ export class WalletConnectService {
     // Close QR Code Modal
     QRCodeModal.close();
     // Get provided accounts and chainId
-    const { accounts, chainId } = payload.params[0];
+    const { accounts, chainIdInDecimal } = payload.params[0];
     const response = RESPONSE.WALLET_CONNECT_CONNECTED;
+    const chainId = this.helper.decimalToHex(chainIdInDecimal);
     response.data = Object.assign({}, { account: accounts, chainId: chainId });
     self.connectionStatusUpdate(response);
   }
