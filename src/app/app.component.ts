@@ -5,6 +5,8 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 // import { StorageService, MetaMaskService } from "ng-blockchainx";
 import { Web3Service } from 'projects/ng-blockchain-x/src/public-api';
 import { getAddNetworkParam } from 'projects/ng-blockchain-x/src/lib/meta-mask/meta-mask.mock';
+// import { WalletConnectService } from 'projects/ng-blockchain-x/src/lib/wallet-connect/wallet-connect.service';
+
 
 const abi = require('src/contracts/nifty-token.json');
 
@@ -32,6 +34,10 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     console.log(`AppComponent : ngOnInit`);
+    this.walletConnectService.openWalletConnectModal();
+    this.walletConnectService.connectionListener.subscribe((response: any) => {
+      console.log('wallet connect response',response);
+    })
     console.dir(`meta mask connection status : ${JSON.stringify(getAddNetworkParam('0x61'))}`);
     this.chains = chains;
     this.metaMaskService.setSupportedChains(['0x61', '0x38']);
