@@ -64,10 +64,10 @@ export class WalletConnectService {
     // Close QR Code Modal
     QRCodeModal.close();
     // Get provided accounts and chainId
-    const { accounts, chainIdInDecimal } = payload.params[0];
+    const { accounts, chainId } = payload.params[0];
     const response = RESPONSE.WALLET_CONNECT_CONNECTED;
-    const chainId = this.helper.decimalToHex(chainIdInDecimal);
-    response.data = Object.assign({}, { account: accounts, chainId: chainId });
+    const chainIdInHex = this.helper.decimalToHex(chainId);;
+    response.data = Object.assign({}, { account: accounts, chainId: chainIdInHex });
     self.connectionStatusUpdate(response);
   }
 
