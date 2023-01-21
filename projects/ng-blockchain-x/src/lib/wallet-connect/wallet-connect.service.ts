@@ -64,9 +64,10 @@ export class WalletConnectService {
     // Close QR Code Modal
     QRCodeModal.close();
     // Get provided accounts and chainId
+    console.log('params', payload.params[0]);
     const { accounts, chainId } = payload.params[0];
     const response = RESPONSE.WALLET_CONNECT_CONNECTED;
-    const chainIdInHex = this.helper.decimalToHex(chainId);;
+    const chainIdInHex = this.helper.decimalToHex(chainId);
     response.data = Object.assign({}, { account: accounts, chainId: chainIdInHex });
     self.connectionStatusUpdate(response);
   }
@@ -87,7 +88,8 @@ export class WalletConnectService {
     // Get updated accounts and chainId
     const { accounts, chainId } = payload.params[0];
     const response = RESPONSE.WALLET_CONNECT_CHANGED;
-    response.data = Object.assign({}, { account: accounts, chainId: chainId });
+    const chainIdInHex = this.helper.decimalToHex(chainId);
+    response.data = Object.assign({}, { account: accounts, chainId: chainIdInHex });
     self.connectionStatusUpdate(response);
   }
 
