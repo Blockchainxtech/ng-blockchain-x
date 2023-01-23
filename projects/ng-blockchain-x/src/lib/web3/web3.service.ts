@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 // @ts-ignore
 import Web3 from 'web3/dist/web3.min.js';
+import WalletConnectProvider from "@walletconnect/web3-provider";
 import { chainInfo } from '../meta-mask/meta-mask.mock';
 
 import { connectParams, connectResponse, ETHsendTransactionParam, SendTransactionParam, ApproveParam } from './web3-interfaces';
@@ -22,16 +23,26 @@ export class Web3Service {
     }
 
     /**
-     * 
-     * @returns 
+     * Returns web3 service
+     * @param connectionParams 
+     * @param walletType  1- metamask, 2- wallet connect
+     * @returns connect 
      */
-    public async connect(connectionParams: connectParams): Promise<connectResponse> {
+    public async connect(connectionParams: connectParams, walletType: number = 1): Promise<connectResponse> {
 
         return new Promise(async (resolve, reject) => {
             const chainDetail = chainInfo(connectionParams.chainId);
 
             if (connectionParams.rpcUrl) {
-                this.web3 = new Web3(connectionParams.rpcUrl);
+                if (walletType == 2) {
+                    //  Create WalletConnect Provider
+                    const provider = new WalletConnectProvider({
+                        infuraId: connectionParams.infuraApiKey, // Required
+                    });
+                    this.web3 = new Web3(provider);
+                } else {
+                    this.web3 = new Web3(connectionParams.rpcUrl);
+                }
                 const accounts = await this.web3.eth.getAccounts().catch(console.log);
                 this.account = accounts[0];
                 resolve({ status: true, message: 'Web3 connected successfully', account: this.account });
@@ -46,7 +57,15 @@ export class Web3Service {
                             reject({ status: false, message: 'Infura api key needed for this network', account: null });
                         } else {
                             const rpcUrl = chainDetail.rpc[0].replace('${INFURA_API_KEY}', connectionParams.infuraApiKey);
-                            this.web3 = new Web3(rpcUrl);
+                            if (walletType == 2) {
+                                //  Create WalletConnect Provider
+                                const provider = new WalletConnectProvider({
+                                    infuraId: connectionParams.infuraApiKey, // Required
+                                });
+                                this.web3 = new Web3(provider);
+                            } else {
+                                this.web3 = new Web3(rpcUrl);
+                            }
                             const accounts = await this.web3.eth.getAccounts().catch(console.log);
                             this.account = accounts[0];
                         }
