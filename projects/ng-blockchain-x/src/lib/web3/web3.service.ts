@@ -39,6 +39,8 @@ export class Web3Service {
                     const provider = new WalletConnectProvider({
                         infuraId: connectionParams.infuraApiKey, // Required
                     });
+                    //  Enable session (triggers QR Code modal)
+                    await provider.enable();
                     this.web3 = new Web3(provider);
                 } else {
                     this.web3 = new Web3(connectionParams.rpcUrl);
