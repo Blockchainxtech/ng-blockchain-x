@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 
 // @ts-ignore
-import Web3 from 'web3/dist/web3.min.js';
+import Web3 from 'web3';
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import QRCodeModal from '@walletconnect/qrcode-modal';
 import { chainInfo } from '../meta-mask/meta-mask.mock';
 
 import { connectParams, connectResponse, ETHsendTransactionParam, SendTransactionParam, ApproveParam } from './web3-interfaces';
+import { CustomResponse, RESPONSE, WALLET_CONNECT_EVENTS } from '../wallet-connect/wallet-connect.constants';
+import { BlockchainxHelper } from '../helper.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -16,8 +20,12 @@ export class Web3Service {
     public ethWeb3: any;
     public contract: any;
     public account: string = '';
+    private walletConnect: any;
+    // meta mask connection subject to broadcast connection state
+    private walletConnectConnection = new BehaviorSubject(RESPONSE.SERVICE_INITIALIZED);
+    public connectionListener = this.walletConnectConnection.asObservable();
 
-    constructor() {
+    constructor(private helper: BlockchainxHelper) {
         // @ts-ignore
         this.ethWeb3 = new Web3(window['ethereum']);
     }
@@ -36,12 +44,16 @@ export class Web3Service {
             if (connectionParams.rpcUrl) {
                 if (walletType == 2) {
                     //  Create WalletConnect Provider
-                    const provider = new WalletConnectProvider({
-                        infuraId: connectionParams.infuraApiKey, // Required
+                    this.walletConnect = new WalletConnectProvider({
+                        rpc: {
+                            [connectionParams.chainId]: connectionParams.rpcUrl
+                        },
+                        bridge: 'https://bridge.walletconnect.org'
                     });
+                    this.web3 = new Web3(this.walletConnect);
                     //  Enable session (triggers QR Code modal)
-                    await provider.enable();
-                    this.web3 = new Web3(provider);
+                    await this.walletConnect.enable();
+                    this.walletConnectListeners();
                 } else {
                     this.web3 = new Web3(connectionParams.rpcUrl);
                 }
@@ -59,15 +71,7 @@ export class Web3Service {
                             reject({ status: false, message: 'Infura api key needed for this network', account: null });
                         } else {
                             const rpcUrl = chainDetail.rpc[0].replace('${INFURA_API_KEY}', connectionParams.infuraApiKey);
-                            if (walletType == 2) {
-                                //  Create WalletConnect Provider
-                                const provider = new WalletConnectProvider({
-                                    infuraId: connectionParams.infuraApiKey, // Required
-                                });
-                                this.web3 = new Web3(provider);
-                            } else {
-                                this.web3 = new Web3(rpcUrl);
-                            }
+                            this.web3 = new Web3(rpcUrl);
                             const accounts = await this.web3.eth.getAccounts().catch(console.log);
                             this.account = accounts[0];
                         }
@@ -207,6 +211,62 @@ export class Web3Service {
      */
     public async send(functionName: string, ...params: any) {
         return (await this.contract.methods[functionName](...params).send());
+    }
+
+    /**
+   * wallet connect listeners
+   */
+    public walletConnectListeners() {
+        const self = this;
+        this.walletConnect.on(WALLET_CONNECT_EVENTS.DISCONNECT, (error: any, payload: any) => {
+            this.onDisconnect(self, error, payload);
+        });
+        // this.walletConnect.on(WALLET_CONNECT_EVENTS.CHAIN_CHANGED, (chainId: any) => {
+        //     this.onChainChanged(self, chainId);
+        // });
+        // this event listening on changing account or chain
+        this.walletConnect.on(WALLET_CONNECT_EVENTS.ACCOUNT_CHANGED, (accounts: string[]) => {
+            this.onAccountChanged(self, accounts);
+        });
+    }
+
+    public onDisconnect(self: any, error: any, payload: any) {
+        if (error) {
+            throw error;
+        }
+        const response = RESPONSE.WALLET_CONNECT_DISCONNECTED;
+
+        self.connectionStatusUpdate(response);
+    }
+
+    // public onChainChanged(self: any, chainId: any) {
+    //     // Get updated accounts and chainId
+    //     const account = chainId;
+    //     console.log('onchain changed', account);
+
+    //     // const response = RESPONSE.CHAIN_CHANGED;
+    //     // const chainIdInHex = this.helper.decimalToHex(chainId);
+    //     // response.data = Object.assign({}, { account: accounts, chainId: chainIdInHex });
+    //     // self.connectionStatusUpdate(response);
+    // }
+
+    public onAccountChanged(self: any, accounts: any) {
+        // Get updated accounts and chainId
+        const account = accounts[0];
+        this.web3.eth.getChainId().then((chainId: any) => {
+            const response = RESPONSE.ACCOUNT_CHANGED;
+            const chainIdInHex = this.helper.decimalToHex(chainId);
+            response.data = Object.assign({}, { account: account, chainId: chainIdInHex });
+            self.connectionStatusUpdate(response);
+        });
+    }
+
+    /**
+     *
+     * @param message
+     */
+    public connectionStatusUpdate(response: CustomResponse) {
+        this.walletConnectConnection.next(response);
     }
 
 }

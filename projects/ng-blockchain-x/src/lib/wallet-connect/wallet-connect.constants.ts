@@ -1,7 +1,9 @@
 export const WALLET_CONNECT_EVENTS = {
     CONNECT: 'connect',
     SESSION_UPDATE: 'session_update',
-    DISCONNECT: 'disconnect'
+    DISCONNECT: 'disconnect',
+    ACCOUNT_CHANGED: 'accountsChanged',
+    CHAIN_CHANGED: 'chainChanged',
 }
 
 export const WALLET_CONNECT_URI = 'https://bridge.walletconnect.org';
@@ -26,7 +28,7 @@ export const RESPONSE = {
     SERVICE_INITIALIZED: {
         status: true,
         code: 250609,
-        message: 'Service init success',
+        message: 'Wallet connect service init success',
         data: {
 
         }
@@ -35,6 +37,14 @@ export const RESPONSE = {
         status: true,
         code: 250610,
         message: 'chain changed',
+        data: {
+
+        }
+    },
+    ACCOUNT_CHANGED: {
+        status: true,
+        code: 250611,
+        message: 'wallet account or chain changed',
         data: {
 
         }
