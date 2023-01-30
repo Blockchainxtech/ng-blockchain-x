@@ -19,9 +19,9 @@
     "dependencies": {
         "@walletconnect/client": "^1.7.8",
         "@walletconnect/qrcode-modal": "^1.7.8",
-        "@walletconnect/web3-provider": "^1.8.0",
+        "@walletconnect/web3-provider": "1.6.5",
         "tslib": "^2.3.0",
-        "web3": "^1.7.3"
+        "web3": "1.2.11"
     },
     "devDependencies": {
         "angular-jsdoc": "^1.5.1",
